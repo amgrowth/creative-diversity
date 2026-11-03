@@ -1,0 +1,76 @@
+# 📊 The Creative Matrix Framework
+
+## Executive Overview & Core Architecture
+
+The Creative Matrix operates without predictive modeling. It relies on a three-tier architecture: a **labeling system**, a **scoring rule**, and a **gap-selection heuristic**. Its primary purpose is to visualize creative coverage, identify fatigue risks, and highlight high-probability hypotheses for future testing.
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│   1. Labeling Layer     │ ──> │    2. Scoring Layer     │ ──> │   3. Gap Selection      │
+│ (Taxonomy & Combinations)│     │  (Efficiency & Scale)   │     │   (Ranking Heuristics)  │
+└─────────────────────────┘     └─────────────────────────┘     └─────────────────────────┘
+---
+
+## 1. Tagging, Taxonomy & Crossover Logic
+
+Placement relies on standardized multi-dimensional tagging across a fixed taxonomy:
+
+* **Persona Target:** Mapped to your predefined audience roster.
+* **Format Family:** Categorized by structural archetype (e.g., *Unboxing*, *Direct Statement*, *Origin Story*).
+* **Hook Style & Message Theme:** Grouped by opening structure and core value proposition.
+
+### Execution & Combination Rules:
+* **Automated Tagging Rules:** Automated systems audit video and image assets against a written specification. Persona tagging cannot be judged from the opening 3 seconds alone; full asset context is required. Catalog or static feed ads default to name-based tagging with lower confidence scores.
+* **Net-New vs. Iteration Boundary:** Evaluating whether a format or angle is "net-new" vs. a close iteration of an existing category uses the exact same context-level evaluation as persona tagging. If the core structural element remains identical across the asset, it is logged as an iteration within the existing category rather than spinning up a new row or column.
+* **Combo Personas & Crossover Creative:** An asset is not forced into a single persona bucket if it legitimately bridges multiple audiences. When an ad speaks equally to two audiences, it is logged under a **Combo Persona** taxonomy row/column rather than stripping away secondary context.
+
+---
+
+## 2. Scoring & Winner Definitions
+
+Scoring evaluates creative efficiency relative to platform-specific benchmarks:
+
+$$\text{Relative Efficiency} = \frac{\text{Creative Cost per Conversion}}{\text{Channel Average Cost per Conversion}}$$
+
+* *Interpretation:* An efficiency score of `0.80` indicates performance **20% cheaper than the channel baseline**.
+
+### Performance & Hit Rate Rules:
+* **Channel Isolation:** Metrics are evaluated strictly per channel (e.g., Meta vs. YouTube). Cross-channel aggregation is prohibited due to differing attribution models and platform conversion definitions.
+* **Two-Part Winner Definition:** An asset is classified as a "Winner" only if it satisfies both criteria:
+  1. **Scale Threshold:** Ranks in the top 30% of conversion volume for its respective channel.
+  2. **Efficiency Threshold:** Cost per conversion does not exceed 5% above the channel average.
+* **Statistical Significance Threshold for Hit Rate:** Hit rate is only calculated for a format or square once it has accumulated **at least 5 tested variations with verified conversions**. Any square with fewer than 5 converting tests remains in an *Unverified / In-Testing* state to encourage sufficient testing before making scaling or sunset decisions:
+
+$$\text{Hit Rate} = \frac{\text{Total Winning Creatives}}{\text{Total Creative Variations Tested (Min. 5)}} \quad \text{for } N \ge 5$$
+
+---
+
+## 3. Lifecycle, Sunset & Hypothesis Failure Rules
+
+### Lifecycle & Rolling Decay:
+* **Rolling Evaluation Window:** A square’s aggregate status and winning assets are evaluated on a **two-quarter rolling window**.
+* **Hypothesis Decay & Failure Rule:** A hypothesis or square is officially declared a **Failed Hypothesis** when it exhibits **two consecutive quarters of underperformance**.
+
+### Failed Hypothesis Criteria (Preventing Premature Calls):
+To officially declare a hypothesis dead, the test history within that square must satisfy two conditions:
+1. **Scale Backing:** At least **two tests** within the square must have achieved meaningful budget/conversion scale.
+2. **No Outlier Signal:** There must be **no middle-scale, middle-performance variant** present. If an ad shows moderate scale and near-target efficiency, the square remains active for further iteration rather than being written off as a complete structural failure.
+
+---
+
+## 4. Gap Selection & Priority Heuristics
+
+The gap selection model generates a ranked list of testing hypotheses based on component transferability:
+
+$$\text{Hypothesis Assumption:} \quad \text{Winning Persona} + \text{Winning Format} = \text{High-Probability Test}$$
+
+### Gap Ranking Hierarchy:
+1. **Persona Tier Priority:** Core Personas $\rightarrow$ Expansion Personas $\rightarrow$ Combo Personas.
+2. **Format Winner Density:** Total count of winning assets associated with the candidate format.
+3. **Persona Winner Density:** Total count of winning assets associated with the candidate persona.
+
+### Hard Exclusion Rules:
+* Exclude explicit price-led concepts or messaging tied to blocked personas.
+* Exclude platform-incompatible rules (e.g., suppressing non-performing messaging styles or platform-restricted labels when transferring between Meta and YouTube).
+
+### Channel Transfer Logic:
+* The **"Move Across"** queue holds higher statistical confidence than completely untested gaps because the specific pairing has already proven successful on an adjacent channel.
+* *Constraint:* Channel transfer is never guaranteed; variations in user mindset and feed pacing require structural re-briefing when moving assets between platforms.
